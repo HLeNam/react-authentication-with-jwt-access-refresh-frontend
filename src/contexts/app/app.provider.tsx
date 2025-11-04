@@ -57,7 +57,10 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated(false);
     };
 
-    if (isLoading) {
+    const isAuthPath =
+        window.location.pathname.includes("/login") ||
+        window.location.pathname.includes("/register");
+    if (isLoading && !isAuthPath) {
         return (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                 <Spinner className="size-12 text-white" />
