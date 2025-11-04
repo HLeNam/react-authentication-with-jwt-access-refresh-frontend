@@ -3,6 +3,7 @@ import { AppContext, INITIAL_APP_STATE } from "@/contexts/app/app.context";
 import { useGetUserProfile } from "@/hooks/useAuth";
 import { useQueryClient } from "@tanstack/react-query";
 import { authEventEmitter, getRefreshToken } from "@/api/apiClient";
+import { Spinner } from "@/components/ui/spinner";
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(INITIAL_APP_STATE.isAuthenticated);
@@ -55,6 +56,14 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         queryClient.removeQueries({ queryKey: ["userProfile"] });
         setIsAuthenticated(false);
     };
+
+    if (isLoading) {
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                <Spinner className="size-12 text-white" />
+            </div>
+        );
+    }
 
     return (
         <AppContext.Provider
