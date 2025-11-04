@@ -16,8 +16,10 @@ import { Link } from "react-router";
 import { Spinner } from "@/components/ui/spinner";
 import { useEffect } from "react";
 import { clearTokens } from "@/api/apiClient";
+import { useQueryClient } from "@tanstack/react-query";
 
 const UserDropdownMenu = ({ children }: { children: React.ReactNode }) => {
+    const queryClient = useQueryClient();
     const { setIsAuthenticated } = useAppContext();
     const logoutUserMutation = useLogoutUser();
     const { handleError } = useErrorHandler({});
@@ -33,6 +35,7 @@ const UserDropdownMenu = ({ children }: { children: React.ReactNode }) => {
             await logoutUserMutation.mutateAsync();
             clearTokens();
             setIsAuthenticated(false);
+            queryClient.removeQueries({ queryKey: ["userProfile"] });
         } catch (error) {
             handleError(error);
         }
